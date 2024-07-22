@@ -1,4 +1,4 @@
-package mdk.fastuixml;
+package mdk.fastxmlmenu;
 
 public enum Sender {
     CLIENT,

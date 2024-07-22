@@ -1,4 +1,4 @@
-package mdk.fastuixml;
+package mdk.fastxmlmenu;
 
 
 import java.lang.annotation.ElementType;

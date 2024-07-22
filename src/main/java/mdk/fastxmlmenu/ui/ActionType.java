@@ -1,4 +1,4 @@
-package mdk.fastuixml.ui;
+package mdk.fastxmlmenu.ui;
 
 public enum ActionType {
     INPUT,

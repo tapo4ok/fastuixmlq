@@ -1,10 +1,10 @@
-package mdk.fastuixml.xml;
+package mdk.fastxmlmenu.xml;
 
-import mdk.fastuixml.command.UICommand;
-import mdk.fastuixml.ui.Function;
-import mdk.fastuixml.hadler.IHandler;
-import mdk.fastuixml.Sender;
-import mdk.fastuixml.ui.UI;
+import mdk.fastxmlmenu.command.UICommand;
+import mdk.fastxmlmenu.fun.Function;
+import mdk.fastxmlmenu.hadler.IHandler;
+import mdk.fastxmlmenu.Sender;
+import mdk.fastxmlmenu.ui.UI;
 
 import mdk.mutils.Identifier;
 import org.bukkit.Bukkit;

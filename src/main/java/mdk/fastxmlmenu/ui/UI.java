@@ -1,9 +1,10 @@
-package mdk.fastuixml.ui;
+package mdk.fastxmlmenu.ui;
 
-import mdk.fastuixml.UIEvent;
-import mdk.fastuixml.UIMethod;
-import mdk.fastuixml.command.UICommand;
-import mdk.fastuixml.hadler.IHandler;
+import mdk.fastxmlmenu.UIEvent;
+import mdk.fastxmlmenu.UIMethod;
+import mdk.fastxmlmenu.command.UICommand;
+import mdk.fastxmlmenu.fun.Function;
+import mdk.fastxmlmenu.hadler.IHandler;
 import mdk.mutils.Identifier;
 import mdk.mutils.registry.Registry;
 import mdk.mutils.registry.SimpleRegistry;
@@ -11,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -158,6 +160,12 @@ public class UI {
                             }
                             break;
                         }
+                    }
+
+                    if (event.getAction() == InventoryAction.PLACE_ALL ||
+                            event.getAction() == InventoryAction.PLACE_ONE ||
+                            event.getAction() == InventoryAction.PLACE_SOME) {
+                        event.setCancelled(true);
                     }
                 }
             }

@@ -1,6 +1,6 @@
-package mdk.fastuixml.ui;
+package mdk.fastxmlmenu.fun;
 
-import mdk.fastuixml.Sender;
+import mdk.fastxmlmenu.Sender;
 
 import java.util.ArrayList;
 import java.util.List;

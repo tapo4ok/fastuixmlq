@@ -1,9 +1,9 @@
-package mdk.fastuixml.command;
+package mdk.fastxmlmenu.command;
 
 import com.google.common.collect.ImmutableList;
-import mdk.fastuixml.FastUiXML;
-import mdk.fastuixml.ui.UI;
-import mdk.fastuixml.xml.Loader;
+import mdk.fastxmlmenu.FastXMLmenu;
+import mdk.fastxmlmenu.ui.UI;
+import mdk.fastxmlmenu.xml.Loader;
 import mdk.mutils.Identifier;
 import org.apache.commons.lang.Validate;
 import org.bukkit.command.Command;
@@ -43,7 +43,7 @@ public class FastUIcommand implements CommandExecutor, TabExecutor {
                 break;
             }
             case "reload": {
-                JavaPlugin plugin = JavaPlugin.getPlugin(FastUiXML.class);
+                JavaPlugin plugin = JavaPlugin.getPlugin(FastXMLmenu.class);
 
                 UI.us.clear();
                 UI.u.clear();
@@ -52,7 +52,7 @@ public class FastUIcommand implements CommandExecutor, TabExecutor {
                 File data = plugin.getDataFolder();
                 if (!data.exists()) data.mkdirs();
 
-                File[] uis = data.listFiles(FastUiXML.filter);
+                File[] uis = data.listFiles(FastXMLmenu.filter);
 
                 assert uis != null;
                 for (File file : uis) {

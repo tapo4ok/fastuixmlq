@@ -8,7 +8,7 @@
     </mc>
 
     <identifier namespace="fastuixml" path="example_ui" />
-    <handler class="mdk.fastuixml.hadler.EmptyHadler" />
+    <handler class="mdk.fastxmlmenu.hadler.EmptyHadler" />
     <title>Example UI</title>
 
     <command>

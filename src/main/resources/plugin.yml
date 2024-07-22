@@ -1,6 +1,6 @@
-name: fastUiXML
+name: fastXMLmenu
 version: '${version}'
-main: mdk.fastuixml.FastUiXML
+main: mdk.fastxmlmenu.FastXMLmenu
 load: STARTUP
 commands:
   fastui:

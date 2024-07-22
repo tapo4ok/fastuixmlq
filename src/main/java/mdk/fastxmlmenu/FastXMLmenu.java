@@ -1,9 +1,9 @@
-package mdk.fastuixml;
+package mdk.fastxmlmenu;
 
-import mdk.fastuixml.command.FastUIcommand;
-import mdk.fastuixml.ui.UI;
+import mdk.fastxmlmenu.command.FastUIcommand;
+import mdk.fastxmlmenu.ui.UI;
 
-import mdk.fastuixml.xml.Loader;
+import mdk.fastxmlmenu.xml.Loader;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,7 +13,7 @@ import java.nio.file.Files;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public final class FastUiXML extends JavaPlugin {
+public final class FastXMLmenu extends JavaPlugin {
     public static final FilenameFilter filter = new FilenameFilter() {
         @Override
         public boolean accept(File dir, String name) {
