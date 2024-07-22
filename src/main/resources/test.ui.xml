@@ -7,6 +7,10 @@
         </function>
     </mc>
 
+    <identifier namespace="fastuixml" path="example_ui" />
+    <handler class="mdk.fastuixml.hadler.EmptyHadler" />
+    <title>Example UI</title>
+
     <command>
         <permision permision="test">
             <defult defult="OP" />
@@ -15,9 +19,6 @@
         <identifier namespace="fastuixml" path="example_command" />
     </command>
 
-    <identifier namespace="fastuixml" path="example_ui" />
-    <handler class="mdk.fastuixml.hadler.EmptyHadler" />
-    <title>Example UI</title>
     <entries>
         <entry method="test1" slot="0">
             <itemstack material="DIAMOND" amount="1">

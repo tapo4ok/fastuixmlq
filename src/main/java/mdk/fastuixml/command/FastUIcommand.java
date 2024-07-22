@@ -45,10 +45,8 @@ public class FastUIcommand implements CommandExecutor, TabExecutor {
             case "reload": {
                 JavaPlugin plugin = JavaPlugin.getPlugin(FastUiXML.class);
 
-                Iterator<UI> iterator = UI.REGISTRY.iterator();
-                while (iterator.hasNext()) {
-                    iterator.remove();
-                }
+                UI.us.clear();
+                UI.u.clear();
 
                 Loader loader = Loader.getInstance();
                 File data = plugin.getDataFolder();

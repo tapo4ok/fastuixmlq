@@ -22,7 +22,9 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 public class UI {
-    public static final Registry<UI> REGISTRY = new SimpleRegistry<>(new Identifier("fastuixml", "ui_registry"));
+    public static final Map<Identifier, UI> u = new HashMap<>();
+    public static final List<UI> us = new ArrayList<>();
+    public static final Registry<UI> REGISTRY = new SimpleRegistry<UI>(new Identifier("fastuixml", "ui_registry"), u,  us);
 
 
     private Map<String, Function> functionMap;

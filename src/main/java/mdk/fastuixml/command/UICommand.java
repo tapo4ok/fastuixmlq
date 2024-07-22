@@ -25,7 +25,9 @@ public class UICommand extends Command {
     }
 
     public void register(JavaPlugin plugin) {
-        plugin.getServer().getPluginManager().addPermission(permission);
+        try {
+            plugin.getServer().getPluginManager().addPermission(permission);
+        } catch (Throwable ignored) {}
         try {
             Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
             commandMapField.setAccessible(true);
