@@ -1,8 +1,8 @@
-package mdk.fastxmlmenu.ui;
+package mdk.fastxmlmenu.menu;
 
-import mdk.fastxmlmenu.UIEvent;
-import mdk.fastxmlmenu.UIMethod;
-import mdk.fastxmlmenu.command.UICommand;
+import mdk.fastxmlmenu.MENUEvent;
+import mdk.fastxmlmenu.MENUMethod;
+import mdk.fastxmlmenu.command.MenuCommand;
 import mdk.fastxmlmenu.fun.Function;
 import mdk.fastxmlmenu.hadler.IHandler;
 import mdk.mutils.Identifier;
@@ -23,10 +23,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class UI {
-    public static final Map<Identifier, UI> u = new HashMap<>();
-    public static final List<UI> us = new ArrayList<>();
-    public static final Registry<UI> REGISTRY = new SimpleRegistry<UI>(new Identifier("fastuixml", "ui_registry"), u,  us);
+public class Menu {
+    public static final Map<Identifier, Menu> u = new HashMap<>();
+    public static final List<Menu> us = new ArrayList<>();
+    public static final Registry<Menu> REGISTRY = new SimpleRegistry<Menu>(new Identifier("fastuixml", "ui_registry"), u,  us);
 
 
     private Map<String, Function> functionMap;
@@ -34,9 +34,9 @@ public class UI {
     private IHandler handler;
     private final List<Entry> entries;
     private final String title;
-    private Optional<UICommand> command;
+    private Optional<MenuCommand> command;
 
-    public UI(Identifier identifier, IHandler handler, String title) {
+    public Menu(Identifier identifier, IHandler handler, String title) {
         this.identifier = identifier;
         this.handler = handler;
         this.entries = new ArrayList<>();
@@ -57,7 +57,7 @@ public class UI {
         return handler;
     }
 
-    public void setCommand(Optional<UICommand> command) {
+    public void setCommand(Optional<MenuCommand> command) {
         this.command = command;
     }
 
@@ -99,7 +99,7 @@ public class UI {
     public static class EventHandler implements Listener {
         @org.bukkit.event.EventHandler
         public void a(InventoryClickEvent event) {
-            for (UI ui : REGISTRY) {
+            for (Menu ui : REGISTRY) {
                 if (ui.title.equalsIgnoreCase(event.getView().getTitle())) {
                     for (Entry entry : ui.entries) {
                         if (entry.slot == event.getSlot()) {
@@ -129,8 +129,8 @@ public class UI {
 
                             Class<?> cls = ui.handler.getClass();
                             try {
-                                Method method = cls.getMethod(entry.method, UI.class, InventoryClickEvent.class);
-                                UIMethod method1 = method.getAnnotation(UIMethod.class);
+                                Method method = cls.getMethod(entry.method, Menu.class, InventoryClickEvent.class);
+                                MENUMethod method1 = method.getAnnotation(MENUMethod.class);
                                 if (method1 == null) {
                                     break;
                                 }
@@ -142,7 +142,7 @@ public class UI {
                                     method.invoke(ui.handler, ui, event);
                                 } catch (Exception e) {
                                     for (Method method2 : cls.getMethods()) {
-                                        UIEvent event1 = method2.getAnnotation(UIEvent.class);
+                                        MENUEvent event1 = method2.getAnnotation(MENUEvent.class);
                                         if (event1 != null) {
                                             if (event1.value().equalsIgnoreCase("catch")) {
                                                 method2.invoke(ui.handler, ui, event, e);
@@ -173,12 +173,12 @@ public class UI {
 
         @org.bukkit.event.EventHandler
         public void onInventoryClose(InventoryCloseEvent event) {
-            for (UI ui : REGISTRY) {
+            for (Menu ui : REGISTRY) {
                 if (ui.title.equalsIgnoreCase(event.getView().getTitle())) {
                     Class<?> cls = ui.handler.getClass();
                     try {
                         for (Method method : cls.getMethods()) {
-                            UIEvent event1 = method.getAnnotation(UIEvent.class);
+                            MENUEvent event1 = method.getAnnotation(MENUEvent.class);
                             if (event1 != null) {
                                 if (event1.value().equalsIgnoreCase("close")) {
                                     method.invoke(ui.handler, ui, event);
@@ -196,12 +196,12 @@ public class UI {
 
         @org.bukkit.event.EventHandler
         public void onInventoryOpen(InventoryOpenEvent event) {
-            for (UI ui : REGISTRY) {
+            for (Menu ui : REGISTRY) {
                 if (ui.title.equalsIgnoreCase(event.getView().getTitle())) {
                     Class<?> cls = ui.handler.getClass();
                     try {
                         for (Method method : cls.getMethods()) {
-                            UIEvent event1 = method.getAnnotation(UIEvent.class);
+                            MENUEvent event1 = method.getAnnotation(MENUEvent.class);
                             if (event1 != null) {
                                 if (event1.value().equalsIgnoreCase("open")) {
                                     method.invoke(ui.handler, ui, event);

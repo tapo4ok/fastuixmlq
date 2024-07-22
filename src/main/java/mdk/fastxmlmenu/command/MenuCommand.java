@@ -1,6 +1,6 @@
 package mdk.fastxmlmenu.command;
 
-import mdk.fastxmlmenu.ui.UI;
+import mdk.fastxmlmenu.menu.Menu;
 import mdk.mutils.Identifier;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -12,11 +12,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
 
-public class UICommand extends Command {
+public class MenuCommand extends Command {
     public final Permission permission;
     public final Identifier identifier;
     public final Identifier ui;
-    public UICommand(Identifier identifier, Permission permission, Identifier ui) {
+    public MenuCommand(Identifier identifier, Permission permission, Identifier ui) {
         super(identifier.getPath());
         setPermission(permission.getName());
         this.identifier = identifier;
@@ -40,7 +40,7 @@ public class UICommand extends Command {
 
     @Override
     public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-        for (UI ui : UI.REGISTRY) {
+        for (Menu ui : Menu.REGISTRY) {
             if (ui.getIdentifier().equals(this.ui)) {
                 ui.open((Player) sender);
             }

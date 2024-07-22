@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui>
+<menu>
     <mc>
         <function name="test1" sender="CLIENT">
             <line>say hello</line>
@@ -51,4 +51,4 @@
             </itemstack>
         </entry>
     </entries>
-</ui>
+</menu>

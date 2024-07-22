@@ -2,7 +2,7 @@ package mdk.fastxmlmenu.command;
 
 import com.google.common.collect.ImmutableList;
 import mdk.fastxmlmenu.FastXMLmenu;
-import mdk.fastxmlmenu.ui.UI;
+import mdk.fastxmlmenu.menu.Menu;
 import mdk.fastxmlmenu.xml.Loader;
 import mdk.mutils.Identifier;
 import org.apache.commons.lang.Validate;
@@ -19,7 +19,7 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.logging.Level;
 
-public class FastUIcommand implements CommandExecutor, TabExecutor {
+public class FastMenucommand implements CommandExecutor, TabExecutor {
     private final String[] w1 = new String[] {
             "reload",
             "open",
@@ -28,14 +28,14 @@ public class FastUIcommand implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(args.length>0)) {
-            sender.sendMessage(String.format("/%s (%s)", "fastui", String.join("/", w1)));
+            sender.sendMessage(String.format("/%s (%s)", "fastmenu", String.join("/", w1)));
             return false;
         }
 
         switch (args[0]) {
             case "open": {
                 Identifier identifier = new Identifier(args[1], args[2]);
-                for (UI ui : UI.REGISTRY) {
+                for (Menu ui : Menu.REGISTRY) {
                     if (ui.getIdentifier().equals(identifier)) {
                         ui.open((Player) sender);
                     }
@@ -45,8 +45,8 @@ public class FastUIcommand implements CommandExecutor, TabExecutor {
             case "reload": {
                 JavaPlugin plugin = JavaPlugin.getPlugin(FastXMLmenu.class);
 
-                UI.us.clear();
-                UI.u.clear();
+                Menu.us.clear();
+                Menu.u.clear();
 
                 Loader loader = Loader.getInstance();
                 File data = plugin.getDataFolder();
@@ -57,7 +57,7 @@ public class FastUIcommand implements CommandExecutor, TabExecutor {
                 assert uis != null;
                 for (File file : uis) {
                     try {
-                        UI ui = loader.load(Files.newInputStream(file.toPath()));
+                        Menu ui = loader.load(Files.newInputStream(file.toPath()));
                         ui.regster(plugin);
                         plugin.getLogger().log(Level.INFO, String.format("Load ui %s", ui.getIdentifier()));
                     } catch (Exception e) {
@@ -69,9 +69,9 @@ public class FastUIcommand implements CommandExecutor, TabExecutor {
             case "help":
             default:
             {
-                sender.sendMessage("/fastui reload");
-                sender.sendMessage("/fastui help");
-                sender.sendMessage("/fastui open <namespace> <path>");
+                sender.sendMessage("/fastmenu reload");
+                sender.sendMessage("/fastmenu help");
+                sender.sendMessage("/fastmenu open <namespace> <path>");
                 break;
             }
         }

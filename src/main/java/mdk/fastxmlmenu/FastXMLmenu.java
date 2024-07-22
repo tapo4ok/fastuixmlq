@@ -1,7 +1,7 @@
 package mdk.fastxmlmenu;
 
-import mdk.fastxmlmenu.command.FastUIcommand;
-import mdk.fastxmlmenu.ui.UI;
+import mdk.fastxmlmenu.command.FastMenucommand;
+import mdk.fastxmlmenu.menu.Menu;
 
 import mdk.fastxmlmenu.xml.Loader;
 import org.bukkit.command.PluginCommand;
@@ -23,11 +23,11 @@ public final class FastXMLmenu extends JavaPlugin {
     @Override
     public void onEnable() {
         Logger logger = getLogger();
-        getServer().getPluginManager().registerEvents(new UI.EventHandler(), this);
+        getServer().getPluginManager().registerEvents(new Menu.EventHandler(), this);
 
         {
-            FastUIcommand fastUIcommand = new FastUIcommand();
-            PluginCommand command = getCommand("fastui");
+            FastMenucommand fastUIcommand = new FastMenucommand();
+            PluginCommand command = getCommand("fastmenu");
 
             command.setTabCompleter(fastUIcommand);
             command.setExecutor(fastUIcommand);
@@ -42,7 +42,7 @@ public final class FastXMLmenu extends JavaPlugin {
         assert uis != null;
         for (File file : uis) {
             try {
-                UI ui = loader.load(Files.newInputStream(file.toPath()));
+                Menu ui = loader.load(Files.newInputStream(file.toPath()));
                 ui.regster(this);
                 logger.log(Level.INFO, String.format("Load ui %s", ui.getIdentifier()));
             } catch (Exception e) {

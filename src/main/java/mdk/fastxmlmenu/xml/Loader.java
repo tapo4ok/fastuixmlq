@@ -1,10 +1,10 @@
 package mdk.fastxmlmenu.xml;
 
-import mdk.fastxmlmenu.command.UICommand;
+import mdk.fastxmlmenu.command.MenuCommand;
 import mdk.fastxmlmenu.fun.Function;
 import mdk.fastxmlmenu.hadler.IHandler;
 import mdk.fastxmlmenu.Sender;
-import mdk.fastxmlmenu.ui.UI;
+import mdk.fastxmlmenu.menu.Menu;
 
 import mdk.mutils.Identifier;
 import org.bukkit.Bukkit;
@@ -40,7 +40,7 @@ public class Loader {
         return Inc;
     }
 
-    public UI load(InputStream stream) {
+    public Menu load(InputStream stream) {
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(stream);
@@ -62,7 +62,7 @@ public class Loader {
             // Title
             String title = root.getElementsByTagName("title").item(0).getTextContent();
 
-            UI ui = new UI(identifier, handler, title);
+            Menu ui = new Menu(identifier, handler, title);
 
             NodeList commandNodes = root.getElementsByTagName("command");
 
@@ -91,7 +91,7 @@ public class Loader {
                             String namespace2 = identifierElement2.getAttribute("namespace");
                             String path2 = identifierElement2.getAttribute("path");
 
-                            ui.setCommand(Optional.of(new UICommand(new Identifier(namespace2, path2), permission, identifier)));
+                            ui.setCommand(Optional.of(new MenuCommand(new Identifier(namespace2, path2), permission, identifier)));
                         }
                     }
                 }

@@ -1,4 +1,4 @@
-<!ELEMENT ui (identifier, handler, title, (command*, mc?, entry*))
+<!ELEMENT menu (identifier, handler, title, (command*, mc?, entry*))
 <!ELEMENT identifier (namespace, path)>
 <!ATTLIST identifier
     namespace CDATA #REQUIRED

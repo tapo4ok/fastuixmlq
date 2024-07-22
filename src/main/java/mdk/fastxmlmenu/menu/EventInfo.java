@@ -1,4 +1,4 @@
-package mdk.fastxmlmenu.ui;
+package mdk.fastxmlmenu.menu;
 
 public class EventInfo {
     private boolean cancel;
