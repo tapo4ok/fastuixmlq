@@ -1,0 +1,81 @@
+<!ELEMENT ui (identifier, handler, title, (command*, mc?, entry*))
+<!ELEMENT identifier (namespace, path)>
+<!ATTLIST identifier
+    namespace CDATA #REQUIRED
+    path CDATA #REQUIRED>
+
+<!ELEMENT namespace (#PCDATA)>
+<!ELEMENT path (#PCDATA)>
+
+<!ELEMENT handler (class)>
+<!ELEMENT class (#PCDATA)>
+
+<!ELEMENT title (#PCDATA)>
+
+<!ELEMENT command (permision, identifier?)>
+<!ELEMENT permision (defult?)>
+<!ATTLIST permision
+    permision CDATA #REQUIRED>
+
+<!ELEMENT defult (#PCDATA)>
+
+<!ELEMENT identifier (namespace, path)>
+<!ATTLIST identifier
+    namespace CDATA #REQUIRED
+    path CDATA #REQUIRED>
+
+<!ELEMENT mc (function*)>
+<!ELEMENT function (meta?, line*)>
+<!ATTLIST function
+name CDATA #REQUIRED
+sender CDATA #REQUIRED>
+
+<!ELEMENT meta (cancel_event?)>
+<!ATTLIST meta
+    cancel_event CDATA #IMPLIED>
+
+<!ELEMENT line (#PCDATA)>
+
+<!ELEMENT entry (itemstack)>
+<!ATTLIST entry
+    method CDATA #REQUIRED
+    slot CDATA #REQUIRED>
+
+<!ELEMENT itemstack (meta?)>
+<!ATTLIST itemstack
+    material CDATA #REQUIRED
+    amount CDATA #REQUIRED>
+
+<!ELEMENT meta (displayName?, lore?, enchantments?, unbreakable?, itemFlags?)>
+<!ELEMENT displayName (#PCDATA)>
+<!ELEMENT lore (line*)>
+<!ELEMENT enchantments (enchantment*)>
+<!ELEMENT enchantment (type, level)>
+<!ATTLIST enchantment
+    type CDATA #REQUIRED
+    level CDATA #REQUIRED>
+
+<!ELEMENT unbreakable (#PCDATA)>
+<!ELEMENT itemFlags (flag*)>
+<!ELEMENT flag (#PCDATA)>
+
+<!ELEMENT fireworkMeta (effect*, power?)>
+<!ELEMENT effect (type, colors, fadeColors?, trail?, flicker?)>
+<!ATTLIST effect
+    type CDATA #REQUIRED>
+
+<!ELEMENT colors (#PCDATA)>
+<!ELEMENT fadeColors (#PCDATA)>
+<!ELEMENT trail (#PCDATA)>
+<!ELEMENT flicker (#PCDATA)>
+<!ELEMENT power (#PCDATA)>
+
+<!ELEMENT potionMeta (potionType, extended, upgraded)>
+<!ATTLIST potionMeta
+    potionType CDATA #REQUIRED
+    extended CDATA #REQUIRED
+    upgraded CDATA #REQUIRED>
+
+<!ELEMENT spawnEggMeta (entityType)>
+<!ATTLIST spawnEggMeta
+    entityType CDATA #REQUIRED>
