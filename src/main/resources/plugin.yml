@@ -2,3 +2,10 @@ name: fastUiXML
 version: '${version}'
 main: mdk.fastuixml.FastUiXML
 load: STARTUP
+commands:
+  fastui:
+    permission: fastui.admin
+
+permissions:
+  fastui.admin:
+    default: op
