@@ -17,7 +17,7 @@ public final class FastXMLmenu extends JavaPlugin {
     public static final FilenameFilter filter = new FilenameFilter() {
         @Override
         public boolean accept(File dir, String name) {
-            return name.endsWith(".ui.xml");
+            return name.endsWith(".menu.xml");
         }
     };
     @Override
