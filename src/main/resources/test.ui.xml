@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui>
+    <mc>
+        <function name="test1" sender="CLIENT">
+            <line>say hello</line>
+            <meta cancel_event="true" />
+        </function>
+    </mc>
+
+    <command>
+        <permision permision="test">
+            <defult defult="OP" />
+        </permision>
+
+        <identifier namespace="fastuixml" path="example_command" />
+    </command>
+
+    <identifier namespace="fastuixml" path="example_ui" />
+    <handler class="mdk.fastuixml.hadler.EmptyHadler" />
+    <title>Example UI</title>
+    <entries>
+        <entry method="test1" slot="0">
+            <itemstack material="DIAMOND" amount="1">
+                <meta owner="org.bukkit.inventory.meta.ItemMeta">
+                    <displayName>Shiny Diamond</displayName>
+                    <lore>
+                        <line>Very valuable</line>
+                        <line>Handle with care</line>
+                    </lore>
+                    <enchantments>
+                        <enchantment type="DURABILITY" level="3" />
+                    </enchantments>
+                    <unbreakable>true</unbreakable>
+                    <itemFlags>
+                        <flag>HIDE_ENCHANTS</flag>
+                        <flag>HIDE_ATTRIBUTES</flag>
+                    </itemFlags>
+                </meta>
+            </itemstack>
+        </entry>
+        <entry method="test1" slot="2">
+            <itemstack material="POTION" amount="1">
+                <meta owner="org.bukkit.inventory.meta.PotionMeta">
+                    <potionMeta>
+                        <potionType>INSTANT_HEAL</potionType>
+                        <extended>false</extended>
+                        <upgraded>true</upgraded>
+                    </potionMeta>
+                </meta>
+            </itemstack>
+        </entry>
+    </entries>
+</ui>

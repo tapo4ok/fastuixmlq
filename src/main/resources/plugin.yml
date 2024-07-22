@@ -1,0 +1,4 @@
+name: fastUiXML
+version: '${version}'
+main: mdk.fastuixml.FastUiXML
+load: STARTUP
