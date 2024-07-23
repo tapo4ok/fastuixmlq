@@ -27,7 +27,7 @@ import java.util.*;
 public class Menu {
     public static final Map<Identifier, Menu> u = new HashMap<>();
     public static final List<Menu> us = new ArrayList<>();
-    public static final Registry<Menu> REGISTRY = new SimpleRegistry<Menu>(new Identifier("fastuixml", "ui_registry"), u,  us);
+    public static final Registry<Menu> REGISTRY = new SimpleRegistry<Menu>(new Identifier("fastmenuxml", "menu_registry"), u,  us);
 
 
     private Map<String, Function> functionMap;
