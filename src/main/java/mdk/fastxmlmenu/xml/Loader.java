@@ -1,5 +1,6 @@
 package mdk.fastxmlmenu.xml;
 
+import mdk.fastxmlmenu.Profiling;
 import mdk.fastxmlmenu.command.MenuCommand;
 import mdk.fastxmlmenu.fun.Function;
 import mdk.fastxmlmenu.hadler.IHandler;
@@ -18,16 +19,25 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Loader {
+    public static final FilenameFilter menu = (dir, name) -> name.endsWith(".menu.xml");
+    public static final FilenameFilter meta = (dir, name) -> name.endsWith(".meta.xml");
+
     private final DocumentBuilderFactory factory;
     private Loader() {
         factory = DocumentBuilderFactory.newInstance();
@@ -39,10 +49,81 @@ public class Loader {
     public static Loader getInstance() {
         return Inc;
     }
+    public void load(JavaPlugin plugin) {
+        Profiling.start("load");
 
-    public Menu load(InputStream stream) {
+        Menu.us.clear();
+        Menu.u.clear();
+
+        Placeholder placeholder = Placeholder.getInstance();
+        Logger logger = plugin.getLogger();
+
+        File data = plugin.getDataFolder();
+        if (!data.exists()) data.mkdirs();
+
+        {
+            File[] uis = data.listFiles(meta);
+            assert uis != null;
+            for (File file : uis) {
+                try {
+                    load0(Files.newInputStream(file.toPath()), placeholder);
+                    logger.log(Level.INFO, String.format("Load meta %s", file.getName()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        {
+            File[] uis = data.listFiles(menu);
+            assert uis != null;
+            for (File file : uis) {
+                try {
+                    Menu ui = load(Files.newInputStream(file.toPath()), placeholder);
+                    ui.regster(plugin);
+                    logger.log(Level.INFO, String.format("Load ui %s", ui.getIdentifier()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        Profiling.clear();
+        Profiling.end("load");
+
+        Profiling.printProfilingResults();
+        Profiling.clear();
+    }
+
+    public void load0(InputStream stream, Placeholder placeholder) {
+        Profiling.start("parsing");
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
+
+            Document doc = builder.parse(stream);
+            doc.getDocumentElement().normalize();
+
+            NodeList nodeList = doc.getElementsByTagName("entry");
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    placeholder.map.put(element.getAttribute("name"), element.getTextContent());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Profiling.end("parsing");
+        Profiling.printProfilingResults();
+    }
+
+    public Menu load(InputStream stream, Placeholder placeholder) {
+        Profiling.start("parsing");
+        try {
+            DocumentBuilder builder = factory.newDocumentBuilder();
+
             Document doc = builder.parse(stream);
             doc.getDocumentElement().normalize();
 
@@ -56,11 +137,11 @@ public class Loader {
 
             // Handler
             Element handlerElement = (Element) root.getElementsByTagName("handler").item(0);
-            String handlerClassName = handlerElement.getAttribute("class");
+            String handlerClassName = placeholder.replacePlaceholders(handlerElement.getAttribute("class"));
             IHandler handler = (IHandler) Class.forName(handlerClassName).getDeclaredConstructor().newInstance();
 
             // Title
-            String title = root.getElementsByTagName("title").item(0).getTextContent();
+            String title = placeholder.replacePlaceholders(root.getElementsByTagName("title").item(0).getTextContent());
 
             Menu ui = new Menu(identifier, handler, title);
 
@@ -75,14 +156,14 @@ public class Loader {
                     NodeList permisionNodes = commandElement.getElementsByTagName("permision");
                     if (permisionNodes.getLength() > 0) {
                         Element permisionElement = (Element) permisionNodes.item(0);
-                        String permisionName = permisionElement.getAttribute("permision");
+                        String permisionName = placeholder.replacePlaceholders(permisionElement.getAttribute("permision"));
 
                         Permission permission = new Permission(permisionName);
 
                         NodeList defultNodes = permisionElement.getElementsByTagName("defult");
                         if (defultNodes.getLength() > 0) {
                             Element defultElement = (Element) defultNodes.item(0);
-                            permission.setDefault(PermissionDefault.valueOf(defultElement.getAttribute("defult")));
+                            permission.setDefault(PermissionDefault.valueOf(placeholder.replacePlaceholders(defultElement.getAttribute("defult"))));
                         }
 
                         NodeList identifierNodes = commandElement.getElementsByTagName("identifier");
@@ -107,8 +188,8 @@ public class Loader {
                 for (int i = 0; i < functionNodes.getLength(); i++) {
                     Element functionElement = (Element) functionNodes.item(i);
 
-                    String name = functionElement.getAttribute("name");
-                    Function function = new Function(name, Sender.valueOf(functionElement.getAttribute("sender")));
+                    String name = placeholder.replacePlaceholders(functionElement.getAttribute("name"));
+                    Function function = new Function(name, Sender.valueOf(placeholder.replacePlaceholders(functionElement.getAttribute("sender"))));
 
                     Element metaElement = (Element) functionElement.getElementsByTagName("meta").item(0);
                     if (metaElement != null) {
@@ -135,22 +216,22 @@ public class Loader {
                 if (entryNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element entryElement = (Element) entryNode;
 
-                    String method = entryElement.getAttribute("method");
-                    int slot = Integer.parseInt(entryElement.getAttribute("slot"));
+                    String method = placeholder.replacePlaceholders(entryElement.getAttribute("method"));
+                    int slot = Integer.parseInt(placeholder.replacePlaceholders(entryElement.getAttribute("slot")));
 
                     Element itemStackElement = (Element) entryElement.getElementsByTagName("itemstack").item(0);
-                    Material material = Material.valueOf(itemStackElement.getAttribute("material"));
-                    int amount = Integer.parseInt(itemStackElement.getAttribute("amount"));
+                    Material material = Material.valueOf(placeholder.replacePlaceholders(itemStackElement.getAttribute("material")));
+                    int amount = Integer.parseInt(placeholder.replacePlaceholders(itemStackElement.getAttribute("amount")));
                     ItemStack stack = new ItemStack(material, amount);
 
                     // Meta data
                     if (itemStackElement.getElementsByTagName("meta").getLength() > 0) {
                         Element metaElement = (Element) itemStackElement.getElementsByTagName("meta").item(0);
-                        String ownerClass = metaElement.getAttribute("owner");
+                        String ownerClass = placeholder.replacePlaceholders(metaElement.getAttribute("owner"));
 
                         ItemMeta meta = stack.getItemMeta();
 
-                        handleItemMeta(metaElement, meta);
+                        handleItemMeta(metaElement, meta, placeholder);
 
                         if ("org.bukkit.inventory.meta.FireworkMeta".equals(ownerClass) && meta instanceof FireworkMeta) {
                             meta = handleFireworkMeta(metaElement, (FireworkMeta) meta);
@@ -167,16 +248,20 @@ public class Loader {
                 }
             }
 
+            Profiling.end("parsing");
+            Profiling.printProfilingResults();
             return ui;
 
         } catch (Exception e) {
             e.printStackTrace();
+            Profiling.end("parsing");
+            Profiling.printProfilingResults();
             return null;
         }
     }
 
 
-    private static ItemMeta handleItemMeta(Element metaElement, ItemMeta meta) {
+    private static ItemMeta handleItemMeta(Element metaElement, ItemMeta meta, Placeholder placeholder) {
         // Display Name
         if (metaElement.getElementsByTagName("displayName").getLength() > 0) {
             String displayName = metaElement.getElementsByTagName("displayName").item(0).getTextContent();
@@ -188,7 +273,7 @@ public class Loader {
             List<String> lore = new ArrayList<>();
             NodeList loreLines = metaElement.getElementsByTagName("line");
             for (int i = 0; i < loreLines.getLength(); i++) {
-                lore.add(loreLines.item(i).getTextContent());
+                lore.add(placeholder.replacePlaceholders(loreLines.item(i).getTextContent()));
             }
             meta.setLore(lore);
         }
@@ -198,8 +283,8 @@ public class Loader {
             NodeList enchantmentNodes = metaElement.getElementsByTagName("enchantment");
             for (int i = 0; i < enchantmentNodes.getLength(); i++) {
                 Element enchantmentElement = (Element) enchantmentNodes.item(i);
-                Enchantment enchantment = Enchantment.getByName(enchantmentElement.getAttribute("type"));
-                int level = Integer.parseInt(enchantmentElement.getAttribute("level"));
+                Enchantment enchantment = Enchantment.getByName(placeholder.replacePlaceholders(enchantmentElement.getAttribute("type")));
+                int level = Integer.parseInt(placeholder.replacePlaceholders(enchantmentElement.getAttribute("level")));
                 meta.addEnchant(enchantment, level, true);
             }
         }
@@ -212,7 +297,7 @@ public class Loader {
         if (metaElement.getElementsByTagName("itemFlags").getLength() > 0) {
             NodeList flagNodes = metaElement.getElementsByTagName("flag");
             for (int i = 0; i < flagNodes.getLength(); i++) {
-                ItemFlag flag = ItemFlag.valueOf(flagNodes.item(i).getTextContent());
+                ItemFlag flag = ItemFlag.valueOf(placeholder.replacePlaceholders(flagNodes.item(i).getTextContent()));
                 meta.addItemFlags(flag);
             }
         }

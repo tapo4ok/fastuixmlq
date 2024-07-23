@@ -5,6 +5,7 @@ import mdk.fastxmlmenu.MENUMethod;
 import mdk.fastxmlmenu.command.MenuCommand;
 import mdk.fastxmlmenu.fun.Function;
 import mdk.fastxmlmenu.hadler.IHandler;
+import mdk.fastxmlmenu.xml.Placeholder;
 import mdk.mutils.Identifier;
 import mdk.mutils.registry.Registry;
 import mdk.mutils.registry.SimpleRegistry;
@@ -107,15 +108,19 @@ public class Menu {
                                 Function function = ui.functionMap.get(entry.method);
                                 HumanEntity entity = event.getWhoClicked();
 
+                                Placeholder holder = Placeholder.getInstance();
+                                Map<String, String> map = new HashMap<>();
+                                map.put("player", event.getWhoClicked().getName());
+
                                 switch (function.getSender()) {
                                     case SERVER:
                                         for (String line : function.getLines()) {
-                                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), line);
+                                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), holder.replacePlaceholders(line, map));
                                         }
                                         break;
                                     case CLIENT:
                                         for (String line : function.getLines()) {
-                                            Bukkit.dispatchCommand(entity, line);
+                                            Bukkit.dispatchCommand(entity, holder.replacePlaceholders(line, map));
                                         }
                                 }
 

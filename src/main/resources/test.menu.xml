@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menu>
     <mc>
-        <function name="test1" sender="CLIENT">
-            <line>say hello</line>
+        <function name="test1" sender="SERVER">
+            <line>say hello ${player}</line>
             <meta cancel_event="true" />
         </function>
     </mc>
 
-    <identifier namespace="fastuixml" path="example_ui" />
+    <identifier namespace="fastmenu" path="example_menu" />
     <handler class="mdk.fastxmlmenu.hadler.EmptyHadler" />
     <title>Example UI</title>
 
@@ -16,7 +16,7 @@
             <defult defult="OP" />
         </permision>
 
-        <identifier namespace="fastuixml" path="example_command" />
+        <identifier namespace="fastmenu" path="example_command" />
     </command>
 
     <entries>

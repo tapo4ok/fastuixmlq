@@ -3,7 +3,7 @@ version: '${version}'
 main: mdk.fastxmlmenu.FastXMLmenu
 load: STARTUP
 commands:
-  fastui:
+  fastmenu:
     permission: fastui.admin
 
 permissions:

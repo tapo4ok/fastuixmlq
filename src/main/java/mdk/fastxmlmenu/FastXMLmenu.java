@@ -14,15 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class FastXMLmenu extends JavaPlugin {
-    public static final FilenameFilter filter = new FilenameFilter() {
-        @Override
-        public boolean accept(File dir, String name) {
-            return name.endsWith(".menu.xml");
-        }
-    };
     @Override
     public void onEnable() {
-        Logger logger = getLogger();
         getServer().getPluginManager().registerEvents(new Menu.EventHandler(), this);
 
         {
@@ -34,21 +27,8 @@ public final class FastXMLmenu extends JavaPlugin {
         }
 
         Loader loader = Loader.getInstance();
-        File data = getDataFolder();
-        if (!data.exists()) data.mkdirs();
 
-        File[] uis = data.listFiles(filter);
-
-        assert uis != null;
-        for (File file : uis) {
-            try {
-                Menu ui = loader.load(Files.newInputStream(file.toPath()));
-                ui.regster(this);
-                logger.log(Level.INFO, String.format("Load ui %s", ui.getIdentifier()));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        loader.load(this);
     }
 
     @Override
