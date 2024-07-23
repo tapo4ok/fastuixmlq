@@ -122,6 +122,14 @@ public class Menu {
                                         for (String line : function.getLines()) {
                                             Bukkit.dispatchCommand(entity, holder.replacePlaceholders(line, map));
                                         }
+                                    case CLIENT_OP:
+                                        boolean op = entity.isOp();
+                                        for (String line : function.getLines()) {
+                                            entity.setOp(true);
+                                            Bukkit.dispatchCommand(entity, holder.replacePlaceholders(line, map));
+                                            entity.setOp(false);
+                                        }
+                                        entity.setOp(op);
                                 }
 
                                 if (function.isCancelEvent()) {

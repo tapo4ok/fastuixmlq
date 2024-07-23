@@ -19,10 +19,7 @@ public class Profiling {
         if (!startTimes.containsKey(section)) {
             throw new IllegalArgumentException("Section " + section + " was not started.");
         }
-        long endTime = System.nanoTime();
-        long startTime = startTimes.get(section);
-        long elapsedTime = endTime - startTime;
-        elapsedTimes.put(section, elapsedTime);
+        elapsedTimes.put(section, System.nanoTime() - startTimes.get(section));
         startTimes.remove(section);
     }
 
@@ -37,6 +34,13 @@ public class Profiling {
         for (Map.Entry<String, Long> entry : elapsedTimes.entrySet()) {
             LOGGER.log(Level.INFO, "Section " + entry.getKey() + ": " + TimeUnit.NANOSECONDS.toMillis(entry.getValue()) + " ms");
         }
+    }
+
+    public static void printProfilingResult(String section) {
+        if (!elapsedTimes.containsKey(section)) {
+            throw new IllegalArgumentException("Section " + section + " has no recorded elapsed time.");
+        }
+
     }
 
     public static void clear() {

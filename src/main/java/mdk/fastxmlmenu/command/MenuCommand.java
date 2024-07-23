@@ -13,7 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.lang.reflect.Field;
 
 public class MenuCommand extends Command {
-    public final Permission permission;
+    public Permission permission;
     public final Identifier identifier;
     public final Identifier ui;
     public MenuCommand(Identifier identifier, Permission permission, Identifier ui) {
@@ -27,7 +27,14 @@ public class MenuCommand extends Command {
     public void register(JavaPlugin plugin) {
         try {
             plugin.getServer().getPluginManager().addPermission(permission);
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+            Permission pr = this.permission;
+            this.permission = plugin.getServer().getPluginManager().getPermission(pr.getName());
+            permission.setDefault(pr.getDefault());
+            permission.setDescription(pr.getDescription());
+
+
+        }
         try {
             Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
             commandMapField.setAccessible(true);
